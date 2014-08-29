@@ -1,0 +1,41 @@
+   p {
+    text-indent: 15px;
+    margin-top: 5px;
+   }
+   div#main { 
+    width:95%;
+    background: #D5f0f0;
+    float: left;
+    padding: 15px;
+    margin: 7px 7px 7px 7px;
+    -moz-border-radius: 10px; /* закругление дл€ старых Mozilla Firefox */
+    -webkit-border-radius: 10px; /* закругление дл€ старых Chrome и Safari */
+    -khtml-border-radius:10px; /* закругл. дл€ браузера Konquerer системы Linux */
+    border-radius: 10px;
+    opacity:0.9;/*ѕрозрачность*/
+   }
+   img {
+     width:200px;
+     float:left; /* ¬ыравнивание по левому краю */
+     margin: 30px 15px 7px 7px; /* ќтступы вокруг картинки */
+   }
+   div#main a {
+     color: #1E5D66;
+     text-decoration: none;     
+   }
+   body {
+     background: url(back.jpg) no-repeat;
+     -moz-background-size: 100%; /* Firefox 3.6+ */
+     -webkit-background-size: 100%; /* Safari 3.1+ и Chrome 4.0+ */
+     -o-background-size: 100%; /* Opera 9.6+ */
+     background-size: 100%; /* —овременные браузеры */
+   }
+   td {
+     background: #D5f0f0; 
+     padding: 15px;  
+   }
+   h2 {
+     font-color: #1E5D66;
+     color:#D5f0f0;
+     float: center;
+  }

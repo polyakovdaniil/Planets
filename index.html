@@ -1,0 +1,113 @@
+﻿<html>
+<head>
+<title>Планетарный справочник</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" src="jquery.js">
+</script>
+<script src="dust-full-0.3.0.min.js">
+</script>
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+  
+  // комиляция и загрузка шаблона  
+  var compiled = dust.compile("<img src='planet/{imgsrc}'><div><p><h3 align='center'><b>{name}</b></h3></p><p>Масса: {mass}</p><p>Объем: {volume}</p><p>Площадь поверхности: {square}</p><p align='justify'>{inf}</p></div>", "planet"); 
+  dust.loadSource(compiled);
+  // скрываем div для информации об отдельной планете
+  $("div#main").fadeOut(0);
+  
+  // нажатие ссылки "На главную"
+  $("#mainpage").click(function(){
+    // скрываем div для информации об отдельной планете и отображаем таблицу со списком планет
+    $("div#main").fadeOut(0);
+    $("table").fadeIn(0);  
+  });  
+  
+  // обрабатываем клик по строчке таблицы
+  $("td").click(function(event){
+  
+  
+    // кроссбраузерная инициализация XMLHttpRequest
+    function getXmlHttp(){
+     var xmlhttp;
+     try {
+      xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+     } catch (e) {
+     try {
+       xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+     } catch (E) {
+       xmlhttp = false;
+     }
+    }
+    if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+      xmlhttp = new XMLHttpRequest();
+    }
+    return xmlhttp;
+   };
+   
+   // конвертация символов для HTML-тегов 
+   function convertSpecSymbols (str) {
+	  var
+	    symbols = [
+	      ['&lt;',      '<'],
+	      ['&gt;',      '>']
+	    ],
+	    pos = -1;
+	 
+	   for (var i = 0, n = symbols.length; i < n; i++) {
+	      while ((pos = str.indexOf(symbols[i][0], pos + 1)) != -1) {
+	        str = str.substring(0, pos) + symbols[i][1] + str.substring(pos + symbols[i][0].length);
+	      }
+	    };
+	  return str;	
+	 };
+	
+	// реализация ассинхронного запроса XMLHttpRequest для получения данных о конкретной планете
+    var xmlhttp = getXmlHttp(); 
+	xmlhttp.open("GET", "planet/"+event.target.id+".json", true);
+	xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState == 4) {
+        if(xmlhttp.status == 200) {
+		  // парсим JSON-строку
+          var data = JSON.parse(xmlhttp.responseText);
+		  // подставляем данные в шаблон и выводим полученный HTML-код в div, скрываем таблицу со списком планет 
+		  dust.render("planet", data, function(err, out) {
+		    out = convertSpecSymbols(out);
+            $("table").fadeOut(0);
+			$("div#cont").html(out);
+			$("div#main").fadeIn(0);
+          });
+        };
+      }; 
+    };
+	xmlhttp.send(); 
+  
+  });
+});
+
+</script>
+</head>
+
+<body>
+
+<h2 align="center">Планетарный справочник</h2>
+<table border="1">
+<tr><td width="1%" id="1">Меркурий</td></tr>
+<tr><td width="1%" id="2">Венера</td></tr>
+<tr><td width="1%" id="3">Земля</td></tr>
+<tr><td width="1%" id="4">Марс</td></tr>
+<tr><td width="1%" id="5">Юпитер</td></tr>
+<tr><td width="1%" id="6">Сатурн</td></tr>
+<tr><td width="1%" id="7">Уран</td></tr>
+<tr><td width="1%" id="8">Нептун</td></tr>
+</table>
+
+<div id="main">
+  <p align="right"><a id="mainpage">На главную</a></p>
+  <div id="cont"></div>
+</div>
+
+</body>
+
+</html>
